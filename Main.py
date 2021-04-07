@@ -14,6 +14,20 @@ parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltag
                    'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
                    'Smoothing', 'Ring Artifact Correction', 'Beam Hardening Correction (%)']
 
+# Prepares data from seperate about file for output within
+aboutText = []
+aboutFile = open("Documents/About", "r", encoding="utf-8")
+for line in aboutFile.readlines():
+    aboutText.append(line)
+informationAbout = ''.join(aboutText)
+
+useText = []
+useFile = open("Documents/Use_Guide", "r", encoding="utf-8")
+for line in useFile.readlines():
+    useText.append(line)
+informationUseGuide = ''.join(useText)
+
+
 ######################################################################################################################
 # GUI Interface Setup
 ######################################################################################################################
@@ -46,7 +60,7 @@ file.add_command(label="Exit", command=mainWindow.quit)
 menuBar.add_cascade(label="More", menu=file)
 
 help = Menu(menuBar, tearoff=0)
-menuBar.add_cascade(label="About", menu=help)
+menuBar.add_cascade(label="Help", menu=help)
 mainWindow.config(menu=menuBar)
 
 
@@ -108,8 +122,10 @@ def dragDropOpen():
                     textArea.insert(END, k + "\t\t\t\t" + v + "\n")
 
 def about():
-    messagebox.showinfo('LogFile_ReadEasy', 'Version 2.3 6th April 2021\n\nDeveloped by Kamil Sokolowski \n'
-                                            'kamil.sokolowski@tri.edu.au \n')
+    messagebox.showinfo('About', message=informationAbout)
+
+def useGuide():
+    messagebox.showinfo('Use Guide', message=informationUseGuide)
 
 
 ######################################################################################################################
@@ -125,6 +141,8 @@ else:
     importedLogFile = sys.argv[1]  # The second argument will be the path of the log file.
     dragDropOpen()
 
-help.add_command(label="Developer", command=about)
+help.add_command(label="About", command=about)
+help.add_command(label="Use Guide", command=useGuide)
+
 
 mainWindow.mainloop()
