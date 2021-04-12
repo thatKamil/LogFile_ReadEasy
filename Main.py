@@ -1,7 +1,7 @@
 ######################################################################################################################
 # Initialisation
 ######################################################################################################################
-
+import os
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -14,15 +14,23 @@ parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltag
                    'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
                    'Smoothing', 'Ring Artifact Correction', 'Beam Hardening Correction (%)']
 
-# Prepares data from seperate about file for output within
+def resource_path(relative_path):
+    """ Get absolute path to resource """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+# Prepares information for the 'About' button.
 aboutText = []
-aboutFile = open("Documents/About", "r", encoding="utf-8")
+aboutPath = resource_path("about")
+aboutFile = open(aboutPath, "r", encoding="utf-8")
 for line in aboutFile.readlines():
     aboutText.append(line)
 informationAbout = ''.join(aboutText)
 
+# Prepares information for the 'Use Guide' button.
 useText = []
-useFile = open("Documents/Use_Guide", "r", encoding="utf-8")
+usePath = resource_path("useGuide")
+useFile = open(usePath, "r", encoding="utf-8")
 for line in useFile.readlines():
     useText.append(line)
 informationUseGuide = ''.join(useText)
@@ -35,54 +43,51 @@ informationUseGuide = ''.join(useText)
 # Main windows setup
 mainWindow = Tk()  # Links main window to the interpreter
 mainWindow.title("LogFile_ReadEasy by Kamil_Sokolowski")
-mainWindow.geometry("394x357+500+300")  # Window size and initial position
+mainWindow.geometry("392x357+300+200")  # Window size and initial position
 mainWindow['bg'] = 'gray98'  # Background colour
 
 # Main text area
-textArea = Text(mainWindow, width=46, height=17, borderwidth=2)
+textArea = Text(mainWindow, width=46, height=17, borderwidth=2, bg='old lace')
 textArea.place(x=10, y=50)
-textArea.insert(END, "\n\n\n\tReady to read easy?")
+textArea.insert(END, "\n\n\t\t\t\n")
+asciiPath = resource_path("asciiBook")
+asciiBook = open(asciiPath, 'r')
+asciiBookOutput = asciiBook.read()
+textArea.insert(END, asciiBookOutput)
 
 # Log file path output text area
-logPath = Text(mainWindow, width=36, height=1)
-logPath.place(x=70, y=330)
+logPath = Text(mainWindow, width=39, height=1, bg='old lace')
+logPath.place(x=68, y=332)
 
 # Labels
-Label(mainWindow, text="Log Path:", bg='gray98').place(x=8, y=330)
-Label(mainWindow, text="LogFile_ReadEasy", bg='gray98', font='Helvetica').place(x=200, y=8)
+Label(mainWindow, text="Log path:", bg='gray98').place(x=8, y=330)
+Label(mainWindow, text="Ready to read easy?", bg='gray98', font='Helvetica').place(x=170, y=10)
 
-menuBar = Menu(mainWindow, background='#ff0000', foreground='black', activebackground='gray98', activeforeground='black')
-file = Menu(menuBar, tearoff=0, background='gray98', foreground='black')
-file.add_command(label="Compare Two Datasets")
-file.add_command(label="Additional Parameters")
-file.add_command(label="Save output")
-file.add_command(label="Exit", command=mainWindow.quit)
-menuBar.add_cascade(label="More", menu=file)
-
-help = Menu(menuBar, tearoff=0)
-menuBar.add_cascade(label="Help", menu=help)
-mainWindow.config(menu=menuBar)
-
+# Icon top left window
+iconPath = resource_path("icon.png")
+mainWindow.tk.call('wm', 'iconphoto', mainWindow._w, PhotoImage(file=iconPath))
 
 ######################################################################################################################
 # Functions
 ######################################################################################################################
 
 def openLogFileAndProcess():
+    '''Main program that runs with an open GUI'''
+
     textArea.delete("1.0", "end")
     logPath.delete("1.0", "end")
 
-    tf = filedialog.askopenfilename(
+    # Select log file
+    logFilePath = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Open Log file",
         filetypes=(("Log Files", "*.log"),)
     )
 
-
-    logPath.insert(END, tf)  # Writes path address to text box in GUI
+    logPath.insert(END, logFilePath)  # Writes path address to text box in GUI
 
     # Opens and parses the data from log file
-    with open(tf, 'r') as fin:
+    with open(logFilePath, 'r') as fin:
         for line in fin:
             for i in parameters_list:
                 if i in line:
@@ -93,12 +98,13 @@ def openLogFileAndProcess():
     for key, value in parameters_dict.items():
         for parameter in parameters_list:
             if parameter == key:
-                if len(key) > 20:
+                if len(key) > 20:  # Longer strings are never neccesary for ID of parameter.
                     textArea.insert(END, (key[:15]) + "\t\t\t\t" + value + "\n")
                 else:
                     textArea.insert(END, key + "\t\t\t\t" + value + "\n")
 
 def dragDropOpen():
+    """Main program that runs when a log file is drag and dropped onto the exe"""
     textArea.delete("1.0", "end")
     logPath.delete("1.0", "end")
 
@@ -122,27 +128,27 @@ def dragDropOpen():
                     textArea.insert(END, k + "\t\t\t\t" + v + "\n")
 
 def about():
-    messagebox.showinfo('About', message=informationAbout)
+    """Message box displays information about program"""
+    messagebox.showinfo('about', message=informationAbout)
 
 def useGuide():
+    """Message box displays guide on how to use the program"""
     messagebox.showinfo('Use Guide', message=informationUseGuide)
 
 
 ######################################################################################################################
 # Run Program
 ######################################################################################################################
-# Main button
-Button(mainWindow, text="Open Log File & Process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
+# Main buttons
+Button(mainWindow, text="Open log file & process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
+Button(mainWindow, text="About", command=about, height=1, width=6, bg='snow').place(x=330, y=23)
+Button(mainWindow, text="Guide", command=useGuide, height=1, width=6, bg='snow').place(x=330, y=1)
 
-# Gives the option of dragging and dropping a log file onto icon, or opening file and selecting log file.
+# Gives the option of dragging and dropping a log file onto icon.png, or opening file and selecting log file.
 if len(sys.argv) == 1:  #
     waitFlag = True
 else:
     importedLogFile = sys.argv[1]  # The second argument will be the path of the log file.
     dragDropOpen()
-
-help.add_command(label="About", command=about)
-help.add_command(label="Use Guide", command=useGuide)
-
 
 mainWindow.mainloop()
