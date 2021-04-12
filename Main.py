@@ -15,11 +15,11 @@ parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltag
                    'Smoothing', 'Ring Artifact Correction', 'Beam Hardening Correction (%)']
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    """ Get absolute path to resource """
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
-# Prepares data from seperate about file for output within
+# Prepares information for the 'About' button.
 aboutText = []
 aboutPath = resource_path("about")
 aboutFile = open(aboutPath, "r", encoding="utf-8")
@@ -27,6 +27,7 @@ for line in aboutFile.readlines():
     aboutText.append(line)
 informationAbout = ''.join(aboutText)
 
+# Prepares information for the 'Use Guide' button.
 useText = []
 usePath = resource_path("useGuide")
 useFile = open(usePath, "r", encoding="utf-8")
@@ -68,21 +69,22 @@ Label(mainWindow, text="Ready to read easy?", bg='gray98', font='Helvetica').pla
 ######################################################################################################################
 
 def openLogFileAndProcess():
-    '''Main program that runs when GUI is open.'''
+    '''Main program that runs with an open GUI'''
 
     textArea.delete("1.0", "end")
     logPath.delete("1.0", "end")
 
-    tf = filedialog.askopenfilename(
+    # Select log file
+    logFilePath = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Open Log file",
         filetypes=(("Log Files", "*.log"),)
     )
 
-    logPath.insert(END, tf)  # Writes path address to text box in GUI
+    logPath.insert(END, logFilePath)  # Writes path address to text box in GUI
 
     # Opens and parses the data from log file
-    with open(tf, 'r') as fin:
+    with open(logFilePath, 'r') as fin:
         for line in fin:
             for i in parameters_list:
                 if i in line:
@@ -99,6 +101,7 @@ def openLogFileAndProcess():
                     textArea.insert(END, key + "\t\t\t\t" + value + "\n")
 
 def dragDropOpen():
+    """Main program that runs when a log file is drag and dropped onto the exe"""
     textArea.delete("1.0", "end")
     logPath.delete("1.0", "end")
 
@@ -122,16 +125,18 @@ def dragDropOpen():
                     textArea.insert(END, k + "\t\t\t\t" + v + "\n")
 
 def about():
+    """Message box displays information about program"""
     messagebox.showinfo('about', message=informationAbout)
 
 def useGuide():
+    """Message box displays guide on how to use the program"""
     messagebox.showinfo('Use Guide', message=informationUseGuide)
 
 
 ######################################################################################################################
 # Run Program
 ######################################################################################################################
-# Main button
+# Main buttons
 Button(mainWindow, text="Open log file & process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
 Button(mainWindow, text="About", command=about, height=1, width=6, bg='snow').place(x=330, y=23)
 Button(mainWindow, text="Guide", command=useGuide, height=1, width=6, bg='snow').place(x=330, y=1)
