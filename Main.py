@@ -35,33 +35,27 @@ informationUseGuide = ''.join(useText)
 # Main windows setup
 mainWindow = Tk()  # Links main window to the interpreter
 mainWindow.title("LogFile_ReadEasy by Kamil_Sokolowski")
-mainWindow.geometry("394x357+500+300")  # Window size and initial position
+mainWindow.geometry("392x357+300+200")  # Window size and initial position
 mainWindow['bg'] = 'gray98'  # Background colour
 
 # Main text area
-textArea = Text(mainWindow, width=46, height=17, borderwidth=2)
+textArea = Text(mainWindow, width=46, height=17, borderwidth=2, bg='old lace')
 textArea.place(x=10, y=50)
-textArea.insert(END, "\n\n\n\tReady to read easy?")
+textArea.insert(END, "\n\n\t\t\t\n")
+pic = open("Documents/book.txt", 'r')
+data = pic.read()
+textArea.insert(END, data)
 
 # Log file path output text area
-logPath = Text(mainWindow, width=36, height=1)
-logPath.place(x=70, y=330)
+logPath = Text(mainWindow, width=39, height=1, bg='old lace')
+logPath.place(x=68, y=332)
 
 # Labels
 Label(mainWindow, text="Log Path:", bg='gray98').place(x=8, y=330)
-Label(mainWindow, text="LogFile_ReadEasy", bg='gray98', font='Helvetica').place(x=200, y=8)
+Label(mainWindow, text="Ready to read easy?", bg='gray98', font='Helvetica').place(x=170, y=10)
 
 menuBar = Menu(mainWindow, background='#ff0000', foreground='black', activebackground='gray98', activeforeground='black')
 file = Menu(menuBar, tearoff=0, background='gray98', foreground='black')
-file.add_command(label="Compare Two Datasets")
-file.add_command(label="Additional Parameters")
-file.add_command(label="Save output")
-file.add_command(label="Exit", command=mainWindow.quit)
-menuBar.add_cascade(label="More", menu=file)
-
-help = Menu(menuBar, tearoff=0)
-menuBar.add_cascade(label="Help", menu=help)
-mainWindow.config(menu=menuBar)
 
 
 ######################################################################################################################
@@ -93,7 +87,7 @@ def openLogFileAndProcess():
     for key, value in parameters_dict.items():
         for parameter in parameters_list:
             if parameter == key:
-                if len(key) > 20:
+                if len(key) > 20:  # Longer strings are never neccesary for ID of parameter.
                     textArea.insert(END, (key[:15]) + "\t\t\t\t" + value + "\n")
                 else:
                     textArea.insert(END, key + "\t\t\t\t" + value + "\n")
@@ -133,6 +127,8 @@ def useGuide():
 ######################################################################################################################
 # Main button
 Button(mainWindow, text="Open Log File & Process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
+Button(mainWindow, text="About", command=about, height=1, width=6, bg='snow').place(x=330, y=23)
+Button(mainWindow, text="Guide", command=useGuide, height=1, width=6, bg='snow').place(x=330, y=1)
 
 # Gives the option of dragging and dropping a log file onto icon, or opening file and selecting log file.
 if len(sys.argv) == 1:  #
@@ -140,9 +136,5 @@ if len(sys.argv) == 1:  #
 else:
     importedLogFile = sys.argv[1]  # The second argument will be the path of the log file.
     dragDropOpen()
-
-help.add_command(label="About", command=about)
-help.add_command(label="Use Guide", command=useGuide)
-
 
 mainWindow.mainloop()
