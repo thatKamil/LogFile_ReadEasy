@@ -1,7 +1,7 @@
 ######################################################################################################################
 # Initialisation
 ######################################################################################################################
-
+import os
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -14,15 +14,22 @@ parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltag
                    'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
                    'Smoothing', 'Ring Artifact Correction', 'Beam Hardening Correction (%)']
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 # Prepares data from seperate about file for output within
 aboutText = []
-aboutFile = open("Documents/About", "r", encoding="utf-8")
+aboutPath = resource_path("about")
+aboutFile = open(aboutPath, "r", encoding="utf-8")
 for line in aboutFile.readlines():
     aboutText.append(line)
 informationAbout = ''.join(aboutText)
 
 useText = []
-useFile = open("Documents/Use_Guide", "r", encoding="utf-8")
+usePath = resource_path("useGuide")
+useFile = open(usePath, "r", encoding="utf-8")
 for line in useFile.readlines():
     useText.append(line)
 informationUseGuide = ''.join(useText)
@@ -42,7 +49,8 @@ mainWindow['bg'] = 'gray98'  # Background colour
 textArea = Text(mainWindow, width=46, height=17, borderwidth=2, bg='old lace')
 textArea.place(x=10, y=50)
 textArea.insert(END, "\n\n\t\t\t\n")
-asciiBook = open("Documents/book.txt", 'r')
+asciiPath = resource_path("asciiBook")
+asciiBook = open(asciiPath, 'r')
 asciiBookOutput = asciiBook.read()
 textArea.insert(END, asciiBookOutput)
 
@@ -54,15 +62,14 @@ logPath.place(x=68, y=332)
 Label(mainWindow, text="Log Path:", bg='gray98').place(x=8, y=330)
 Label(mainWindow, text="Ready to read easy?", bg='gray98', font='Helvetica').place(x=170, y=10)
 
-menuBar = Menu(mainWindow, background='#ff0000', foreground='black', activebackground='gray98', activeforeground='black')
-file = Menu(menuBar, tearoff=0, background='gray98', foreground='black')
-
 
 ######################################################################################################################
 # Functions
 ######################################################################################################################
 
 def openLogFileAndProcess():
+    '''Main program that runs when GUI is open.'''
+
     textArea.delete("1.0", "end")
     logPath.delete("1.0", "end")
 
@@ -71,7 +78,6 @@ def openLogFileAndProcess():
         title="Open Log file",
         filetypes=(("Log Files", "*.log"),)
     )
-
 
     logPath.insert(END, tf)  # Writes path address to text box in GUI
 
@@ -116,7 +122,7 @@ def dragDropOpen():
                     textArea.insert(END, k + "\t\t\t\t" + v + "\n")
 
 def about():
-    messagebox.showinfo('About', message=informationAbout)
+    messagebox.showinfo('about', message=informationAbout)
 
 def useGuide():
     messagebox.showinfo('Use Guide', message=informationUseGuide)
@@ -126,7 +132,7 @@ def useGuide():
 # Run Program
 ######################################################################################################################
 # Main button
-Button(mainWindow, text="Open Log File & Process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
+Button(mainWindow, text="Open log file & process", command=openLogFileAndProcess, height=2, width=20, bg='snow').place(x=9, y=5)
 Button(mainWindow, text="About", command=about, height=1, width=6, bg='snow').place(x=330, y=23)
 Button(mainWindow, text="Guide", command=useGuide, height=1, width=6, bg='snow').place(x=330, y=1)
 

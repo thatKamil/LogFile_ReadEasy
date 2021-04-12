@@ -1,8 +1,8 @@
 LogFile_ReadEasy
 
-Version 2.3
+Version 1.0
 
-6th April 2021
+12th April 2021
 
 LogFile_ReadEasy parses useful information from SkyScan 1272 uCT log files.
 
@@ -12,3 +12,4 @@ Any suggestions or features you'd like added?
 Email me : thatKamil@pm.me
 
 Source code & license (MIT) available at: https://github.com/thatKamil/LogFile_ReadEasy
+Ascii Art by jgs
