@@ -42,9 +42,9 @@ mainWindow['bg'] = 'gray98'  # Background colour
 textArea = Text(mainWindow, width=46, height=17, borderwidth=2, bg='old lace')
 textArea.place(x=10, y=50)
 textArea.insert(END, "\n\n\t\t\t\n")
-pic = open("Documents/book.txt", 'r')
-data = pic.read()
-textArea.insert(END, data)
+asciiBook = open("Documents/book.txt", 'r')
+asciiBookOutput = asciiBook.read()
+textArea.insert(END, asciiBookOutput)
 
 # Log file path output text area
 logPath = Text(mainWindow, width=39, height=1, bg='old lace')
