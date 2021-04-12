@@ -60,9 +60,12 @@ logPath = Text(mainWindow, width=39, height=1, bg='old lace')
 logPath.place(x=68, y=332)
 
 # Labels
-Label(mainWindow, text="Log Path:", bg='gray98').place(x=8, y=330)
+Label(mainWindow, text="Log path:", bg='gray98').place(x=8, y=330)
 Label(mainWindow, text="Ready to read easy?", bg='gray98', font='Helvetica').place(x=170, y=10)
 
+# Icon top left window
+iconPath = resource_path("icon.png")
+mainWindow.tk.call('wm', 'iconphoto', mainWindow._w, PhotoImage(file=iconPath))
 
 ######################################################################################################################
 # Functions
@@ -141,7 +144,7 @@ Button(mainWindow, text="Open log file & process", command=openLogFileAndProcess
 Button(mainWindow, text="About", command=about, height=1, width=6, bg='snow').place(x=330, y=23)
 Button(mainWindow, text="Guide", command=useGuide, height=1, width=6, bg='snow').place(x=330, y=1)
 
-# Gives the option of dragging and dropping a log file onto icon, or opening file and selecting log file.
+# Gives the option of dragging and dropping a log file onto icon.png, or opening file and selecting log file.
 if len(sys.argv) == 1:  #
     waitFlag = True
 else:
