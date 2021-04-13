@@ -128,12 +128,19 @@ def dragDropOpen():
                     textArea.insert(END, k + "\t\t\t\t" + v + "\n")
 
 def about():
-    """Message box displays information about program"""
-    messagebox.showinfo('about', message=informationAbout)
+    textArea.delete("1.0", END)
+    with open('about') as aboutText:
+        aboutLines = aboutText.readlines()
+        for i in aboutLines:
+            textArea.insert(END, i)
 
 def useGuide():
-    """Message box displays guide on how to use the program"""
-    messagebox.showinfo('Use Guide', message=informationUseGuide)
+    textArea.delete("1.0", END)
+    with open('useGuide') as useText:
+        useLines = useText.readlines()
+        for i in useLines:
+            textArea.insert(END, i)
+
 
 
 ######################################################################################################################
