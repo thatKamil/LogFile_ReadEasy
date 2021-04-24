@@ -11,7 +11,3 @@ To use the program either:
 
 
 Copy and paste the output data into a seperate file. 
-
-## License
-
-MIT
