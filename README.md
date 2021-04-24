@@ -1,7 +1,8 @@
 # LogFile_ReadEasy
 
-LogFile_ReadEasy is a tool that parses useful information from SkyScan 1272 uCT log files.
-
+LogFile_ReadEasy is a tool that parses useful information from Bruker SkyScan 1272 (and potentially other) uCT log files.
+\
+\
 <img src="https://user-images.githubusercontent.com/70458221/114400217-165de380-9be5-11eb-80a1-1f5bdc15186c.png" width="400"/>
 
 To use the program either:
